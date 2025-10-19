@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мобильная реабилитация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        .mobile-container {
+            max-width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .mobile-header {
+            background: linear-gradient(135deg, #2c7873, #1f5c58);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .mobile-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+        .mobile-nav {
+            display: flex;
+            background: #f8f9fa;
+            padding: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: white;
+            border-radius: 10px;
+            margin: 0 5px;
+            font-size: 0.9em;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e9ecef;
+        }
+        .nav-btn.active {
+            border-color: #2c7873;
+            background: #d4edda;
+            font-weight: bold;
+        }
+        .mobile-content {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .exercise-card-mobile {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px 0;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .exercise-card-mobile.active {
+            border-color: #00b894;
+            background: #d4edda;
+        }
+        .exercise-icon-mobile {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .exercise-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .exercise-desc {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin: 5px 0;
+        }
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .controls-mobile {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+        .btn-mobile {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: #00b894;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .timer-mobile {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            color: #2c7873;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .progress-mobile {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-bar-mobile {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        .stats-mobile {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .stat-card-mobile {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c7873;
+        }
+        .feedback-mobile {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.95em;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .camera-preview {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1em;
+        }
+        @media (max-width: 480px) {
+            .mobile-header h1 {
+                font-size: 1.3em;
+            }
+            .nav-btn {
+                font-size: 0.8em;
+                padding: 10px 5px;
+            }
+            .mobile-content {
+                padding: 15px;
+            }
+        }
+        @media (max-width: 360px) {
+            .mobile-header {
+                padding: 20px 15px;
+            }
+            .mobile-header h1 {
+                font-size: 1.2em;
+            }
+            .stats-mobile {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Шапка -->
+        <div class="mobile-header">
+            <h1>🏥 Мобильная реабилитация</h1>
+            <p>Ваш персональный тренер</p>
+        </div>
+
+        <!-- Навигация -->
+        <div class="mobile-nav">
+            <button class="nav-btn active" onclick="showSection('exercises')">💪 Упражнения</button>
+            <button class="nav-btn" onclick="showSection('progress')">📊 Прогресс</button>
+            <button class="nav-btn" onclick="showSection('instructions')">📋 Инструкции</button>
+        </div>
+
+        <!-- Таймер -->
+        <div class="timer-mobile" id="timerMobile">00:00</div>
+
+        <!-- Основной контент -->
+        <div class="mobile-content">
+            <!-- Секция упражнений -->
+            <div id="exercisesSection" class="content-section">
+                <div class="progress-mobile">
+                    <div class="progress-bar-mobile" id="progressBarMobile" style="width: 0%"></div>
+                </div>
+
+                <div class="stats-mobile">
+                    <div class="stat-card-mobile">
+                        <div class="stat-value" id="accuracyMobile">0%</div>
+                        <div>Точность</div>
+                    </div>
+                    <div class="stat-card-mobile">
+                        <div class="stat-value" id="durationMobile">0:00</div>
+                        <div>Время</div>
+                    </div>
+                    <div class="stat-card-mobile">
+                        <div class="stat-value" id="repsMobile">0</div>
+                        <div>Повторения</div>
+                    </div>
+                </div>
+
+                <div class="feedback-mobile" id="feedbackMobile">
+                    Выберите тип реабилитации и упражнение
+                </div>
+
+                <!-- Упражнения для ноги -->
+                <div class="exercise-card-mobile" onclick="selectExercise('ankle_pumps')">
+                    <div class="exercise-icon-mobile">👣</div>
+                    <div class="exercise-title">Насосы голеностопа</div>
+                    <div class="exercise-desc">Сгибание и разгибание стопы</div>
+                    <div class="difficulty-badge easy">легко</div>
+                </div>
+
+                <div class="exercise-card-mobile" onclick="selectExercise('quad_sets')">
+                    <div class="exercise-icon-mobile">💪</div>
+                    <div class="exercise-title">Напряжение квадрицепса</div>
+                    <div class="exercise-desc">Статическое напряжение бедра</div>
+                    <div class="difficulty-badge easy">легко</div>
+                </div>
+
+                <div class="exercise-card-mobile" onclick="selectExercise('leg_raises')">
+                    <div class="exercise-icon-mobile">⬆️</div>
+                    <div class="exercise-title">Подъем ноги</div>
+                    <div class="exercise-desc">Укрепление мышц бедра</div>
+                    <div class="difficulty-badge medium">средне</div>
+                </div>
+
+                <!-- Упражнения для руки -->
+                <div class="exercise-card-mobile" onclick="selectExercise('finger_flexion')">
+                    <div class="exercise-icon-mobile">✋</div>
+                    <div class="exercise-title">Сгибание пальцев</div>
+                    <div class="exercise-desc">Разработка мелкой моторики</div>
+                    <div class="difficulty-badge easy">легко</div>
+                </div>
+
+                <div class="exercise-card-mobile" onclick="selectExercise('wrist_circles')">
+                    <div class="exercise-icon-mobile">🔄</div>
+                    <div class="exercise-title">Вращение кистью</div>
+                    <div class="exercise-desc">Разработка лучезапястного сустава</div>
+                    <div class="difficulty-badge easy">легко</div>
+                </div>
+
+                <!-- Упражнения после инсульта -->
+                <div class="exercise-card-mobile" onclick="selectExercise('breathing')">
+                    <div class="exercise-icon-mobile">🌬️</div>
+                    <div class="exercise-title">Дыхательная гимнастика</div>
+                    <div class="exercise-desc">Глубокое диафрагмальное дыхание</div>
+                    <div class="difficulty-badge easy">легко</div>
+                </div>
+
+                <div class="exercise-card-mobile" onclick="selectExercise('balance')">
+                    <div class="exercise-icon-mobile">⚖️</div>
+                    <div class="exercise-title">Тренировка баланса</div>
+                    <div class="exercise-desc">Улучшение координации</div>
+                    <div class="difficulty-badge medium">средне</div>
+                </div>
+            </div>
+
+            <!-- Секция прогресса -->
+            <div id="progressSection" class="content-section" style="display: none;">
+                <div class="stat-card-mobile">
+                    <div class="stat-value">85%</div>
+                    <div>Общий прогресс</div>
+                </div>
+                <div class="exercise-card-mobile">
+                    <div style="font-weight: bold; margin-bottom: 10px;">📈 Статистика за неделю:</div>
+                    <div>✅ Выполнено: 12 тренировок</div>
+                    <div>⏱️ Среднее время: 25 мин</div>
+                    <div>🎯 Точность: 78%</div>
+                </div>
+                <div class="exercise-card-mobile">
+                    <div style="font-weight: bold; margin-bottom: 10px;">🏆 Достижения:</div>
+                    <div>⭐ 5 дней подряд</div>
+                    <div>💪 50+ повторений</div>
+                    <div>🚀 Улучшение на 15%</div>
+                </div>
+            </div>
+
+            <!-- Секция инструкций -->
+            <div id="instructionsSection" class="content-section" style="display: none;">
+                <div class="exercise-card-mobile">
+                    <div style="font-weight: bold; margin-bottom: 10px;">📋 Как пользоваться:</div>
+                    <div>1. Выберите упражнение</div>
+                    <div>2. Нажмите "Начать тренировку"</div>
+                    <div>3. Следуйте инструкциям</div>
+                    <div>4. Следите за обратной связью</div>
+                </div>
+                <div class="exercise-card-mobile">
+                    <div style="font-weight: bold; margin-bottom: 10px;">⚠️ Меры предосторожности:</div>
+                    <div>• Консультируйтесь с врачом</div>
+                    <div>• Не выполняйте через боль</div>
+                    <div>• Следите за техникой</div>
+                    <div>• Делайте перерывы</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Управление -->
+        <div class="controls-mobile">
+            <button class="btn-mobile btn-secondary" onclick="toggleCamera()" id="cameraBtnMobile">
+                📷 Камера
+            </button>
+            <button class="btn-mobile btn-primary" onclick="toggleWorkout()" id="workoutBtnMobile">
+                ⏯️ Начать
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Состояние приложения
+        let state = {
+            isWorkoutActive: false,
+            isCameraOn: false,
+            currentExercise: null,
+            timer: 0,
+            timerInterval: null,
+            accuracy: 0,
+            repetitions: 0
+        };
+
+        // Показать секцию
+        function showSection(section) {
+            // Скрыть все секции
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.style.display = 'none';
+            });
+            
+            // Показать выбранную секцию
+            document.getElementById(section + 'Section').style.display = 'block';
+            
+            // Обновить активную кнопку навигации
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Выбор упражнения
+        function selectExercise(exerciseId) {
+            state.currentExercise = exerciseId;
+            
+            // Сбросить активный класс у всех карточек
+            document.querySelectorAll('.exercise-card-mobile').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Добавить активный класс к выбранной карточке
+            event.currentTarget.classList.add('active');
+            
+            // Включить кнопку тренировки
+            document.getElementById('workoutBtnMobile').disabled = false;
+            
+            updateFeedback('Упражнение выбрано. Нажмите "Начать"');
+        }
+
+        // Переключение камеры
+        function toggleCamera() {
+            state.isCameraOn = !state.isCameraOn;
+            const btn = document.getElementById('cameraBtnMobile');
+            
+            if (state.isCameraOn) {
+                btn.innerHTML = '📷 Выкл камеру';
+                btn.style.background = '#dc3545';
+                updateFeedback('Камера включена. Можно начинать тренировку.');
+            } else {
+                btn.innerHTML = '📷 Вкл камеру';
+                btn.style.background = '#6c757d';
+                updateFeedback('Камера выключена.');
+            }
+        }
+
+        // Переключение тренировки
+        function toggleWorkout() {
+            if (!state.currentExercise) {
+                updateFeedback('Сначала выберите упражнение!');
+                return;
+            }
+
+            state.isWorkoutActive = !state.isWorkoutActive;
+            const btn = document.getElementById('workoutBtnMobile');
+            
+            if (state.isWorkoutActive) {
+                // Начало тренировки
+                btn.innerHTML = '⏸️ Пауза';
+                startTimer();
+                startWorkoutAnalysis();
+                updateFeedback('Тренировка началась! Следуйте инструкциям.');
+            } else {
+                // Остановка тренировки
+                btn.innerHTML = '⏯️ Продолжить';
+                stopTimer();
+                updateFeedback('Тренировка на паузе.');
+            }
+        }
+
+        // Таймер
+        function startTimer() {
+            state.timerInterval = setInterval(() => {
+                state.timer++;
+                const minutes = Math.floor(state.timer / 60);
+                const seconds = state.timer % 60;
+                document.getElementById('timerMobile').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('durationMobile').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(state.timerInterval);
+        }
+
+        // Анализ тренировки (имитация)
+        function startWorkoutAnalysis() {
+            if (!state.isWorkoutActive) return;
+
+            const analysisInterval = setInterval(() => {
+                if (!state.isWorkoutActive) {
+                    clearInterval(analysisInterval);
+                    return;
+                }
+
+                // Имитация анализа
+                simulateWorkoutAnalysis();
+                
+            }, 3000);
+        }
+
+        function simulateWorkoutAnalysis() {
+            // Случайное обновление показателей
+            state.accuracy = Math.min(100, state.accuracy + Math.random() * 10);
+            state.repetitions++;
+            
+            // Обновление интерфейса
+            document.getElementById('accuracyMobile').textContent = Math.round(state.accuracy) + '%';
+            document.getElementById('repsMobile').textContent = state.repetitions;
+            document.getElementById('progressBarMobile').style.width = state.accuracy + '%';
+            
+            // Случайная обратная связь
+            const feedbacks = [
+                "✅ Отлично! Техника правильная",
+                "⚠️ Следите за амплитудой движения",
+                "💪 Хороший темп, продолжайте!",
+                "🎯 Точность улучшается",
+                "🚀 Отличный прогресс!"
+            ];
+            const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+            updateFeedback(randomFeedback);
+        }
+
+        // Обновление обратной связи
+        function updateFeedback(message) {
+            document.getElementById('feedbackMobile').textContent = message;
+        }
+
+        // Инициализация
+        document.getElementById('workoutBtnMobile').disabled = true;
+    </script>
+</body>
+</html>
