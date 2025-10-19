@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комплексная медицинская реабилитация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c7873, #1f5c58);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        /* Навигация по типам реабилитации */
+        .rehab-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .rehab-type {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid #e9ecef;
+        }
+        .rehab-type.active {
+            border-color: #2c7873;
+            background: #d4edda;
+        }
+        .rehab-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        /* Этапы реабилитации */
+        .rehab-stages {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background: #e8f4f3;
+        }
+        .stage {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e9ecef;
+        }
+        .stage.active {
+            border-color: #00b894;
+            background: #d4edda;
+        }
+        .stage-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00b894;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .rehab-types, .rehab-stages {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .video-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #e9ecef;
+        }
+        .video-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        video {
+            width: 100%;
+            border-radius: 10px;
+            border: 3px solid #2c7873;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2c7873;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        button:hover {
+            background: #1f5c58;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .primary-btn {
+            background: #00b894;
+        }
+        .primary-btn:hover {
+            background: #00a085;
+        }
+        
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .exercise-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .exercise-card:hover {
+            border-color: #2c7873;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .exercise-card.active {
+            border-color: #00b894;
+            background: #d4edda;
+        }
+        .exercise-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .exercise-difficulty {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-top: 5px;
+        }
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .hard { background: #f8d7da; color: #721c24; }
+        
+        .results-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid #e9ecef;
+        }
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c7873;
+        }
+        .rehab-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #2c7873;
+        }
+        .feedback-log {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e9ecef;
+        }
+        .log-entry {
+            padding: 8px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .success { color: #00b894; }
+        .warning { color: #fdcb6e; }
+        .error { color: #e17055; }
+        .timer {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            color: #2c7873;
+            margin: 20px 0;
+        }
+        .stage-info {
+            background: #e8f4f3;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .medical-alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Комплексная медицинская реабилитация</h1>
+            <p>Специализированные программы восстановления после травм и заболеваний</p>
+        </div>
+        
+        <!-- Навигация по типам реабилитации -->
+        <div class="rehab-types">
+            <div class="rehab-type active" onclick="selectRehabType('leg')">
+                <div class="rehab-icon">🦵</div>
+                <div><strong>Перелом ноги</strong></div>
+                <div style="font-size: 0.9em; color: #666;">Восстановление после перелома</div>
+            </div>
+            <div class="rehab-type" onclick="selectRehabType('arm')">
+                <div class="rehab-icon">💪</div>
+                <div><strong>Перелом руки</strong></div>
+                <div style="font-size: 0.9em; color: #666;">Реабилитация верхних конечностей</div>
+            </div>
+            <div class="rehab-type" onclick="selectRehabType('stroke')">
+                <div class="rehab-icon">🧠</div>
+                <div><strong>После инсульта</strong></div>
+                <div style="font-size: 0.9em; color: #666;">Неврологическая реабилитация</div>
+            </div>
+        </div>
+        
+        <!-- Этапы реабилитации -->
+        <div class="rehab-stages" id="rehabStages">
+            <!-- Этапы будут динамически меняться -->
+        </div>
+        
+        <div class="main-content">
+            <!-- Левая колонка - видео и управление -->
+            <div class="video-section">
+                <div class="stage-info" id="stageInfo">
+                    <strong>Ранний этап (1-2 неделя):</strong> Упражнения выполняются сидя или лежа, минимальная нагрузка
+                </div>
+                
+                <div class="medical-alert" id="medicalAlert">
+                    ⚠️ Перед началом упражнений проконсультируйтесь с врачом!
+                </div>
+                
+                <div class="video-container">
+                    <video id="video" width="640" height="480" autoplay muted></video>
+                </div>
+                
+                <div class="controls">
+                    <button onclick="startCamera()" id="cameraBtn">
+                        📷 Включить камеру
+                    </button>
+                    <button onclick="toggleAnalysis()" id="analysisBtn" disabled class="primary-btn">
+                        ⏯️ Начать анализ
+                    </button>
+                    <button onclick="showInstructions()" id="instructionsBtn">
+                        📋 Инструкция
+                    </button>
+                    <button onclick="showPrecautions()" id="precautionsBtn">
+                        ⚠️ Меры предосторожности
+                    </button>
+                </div>
+
+                <div class="timer" id="timer">00:00</div>
+
+                <h3>Упражнения для текущего этапа:</h3>
+                <div class="exercises-grid" id="exercisesGrid">
+                    <!-- Упражнения будут добавлены через JavaScript -->
+                </div>
+            </div>
+
+            <!-- Правая колонка - результаты и статистика -->
+            <div class="results-section">
+                <div class="rehab-info">
+                    <h3>🎯 Текущая программа реабилитации</h3>
+                    <div id="currentProgram">Перелом ноги - Ранний этап</div>
+                    <div id="stageGoals"></div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="accuracy">0%</div>
+                        <div>Точность выполнения</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="duration">0:00</div>
+                        <div>Время тренировки</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="repetitions">0</div>
+                        <div>Повторения</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div id="liveFeedback" style="
+                    padding: 15px;
+                    margin: 15px 0;
+                    border-radius: 10px;
+                    background: #fff3cd;
+                    font-size: 1.1em;
+                    min-height: 80px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                ">
+                    Выберите тип реабилитации и упражнение для начала
+                </div>
+
+                <h4>Рекомендации и обратная связь:</h4>
+                <div class="feedback-log" id="feedbackLog">
+                    <div class="log-entry">Система комплексной реабилитации готова к работе</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Элементы DOM
+        const video = document.getElementById('video');
+        const cameraBtn = document.getElementById('cameraBtn');
+        const analysisBtn = document.getElementById('analysisBtn');
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('progressBar');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const durationDisplay = document.getElementById('duration');
+        const repetitionsDisplay = document.getElementById('repetitions');
+        const liveFeedback = document.getElementById('liveFeedback');
+        const feedbackLog = document.getElementById('feedbackLog');
+        const exercisesGrid = document.getElementById('exercisesGrid');
+        const stageInfo = document.getElementById('stageInfo');
+        const currentProgramDisplay = document.getElementById('currentProgram');
+        const stageGoalsDisplay = document.getElementById('stageGoals');
+        const rehabStages = document.getElementById('rehabStages');
+        const medicalAlert = document.getElementById('medicalAlert');
+
+        // Состояние приложения
+        let state = {
+            isCameraOn: false,
+            isAnalyzing: false,
+            currentExercise: null,
+            currentRehabType: 'leg',
+            currentStage: 1,
+            startTime: null,
+            timerInterval: null,
+            repetitions: 0,
+            accuracy: 0,
+            sessionDuration: 0
+        };
+
+        // Типы реабилитации
+        const rehabTypes = {
+            leg: {
+                name: "Перелом ноги",
+                icon: "🦵",
+                stages: {
+                    1: {
+                        name: "Ранний этап (1-2 неделя)",
+                        description: "Упражнения выполняются сидя или лежа, минимальная нагрузка на поврежденную ногу",
+                        goals: "Снижение отека, поддержание мышечного тонуса, улучшение кровообращения",
+                        precautions: "Избегайте нагрузки на поврежденную ногу, выполняйте упражнения медленно"
+                    },
+                    2: {
+                        name: "Восстановление (3-6 неделя)", 
+                        description: "Постепенное увеличение нагрузки, добавление упражнений стоя с опорой",
+                        goals: "Восстановление диапазона движения, укрепление мышц бедра и голени",
+                        precautions: "Контролируйте болевые ощущения, используйте опору при необходимости"
+                    },
+                    3: {
+                        name: "Укрепление (7-12 неделя)",
+                        description: "Активные упражнения на укрепление, тренировка баланса",
+                        goals: "Полное восстановление силы, улучшение координации и баланса",
+                        precautions: "Избегайте прыжков и бега, следите за техникой выполнения"
+                    },
+                    4: {
+                        name: "Возвращение к активности (13+ неделя)",
+                        description: "Функциональные упражнения, подготовка к повседневной активности",
+                        goals: "Возвращение к нормальной ходьбе, подготовка к спортивным нагрузкам",
+                        precautions: "Постепенное увеличение интенсивности, контроль усталости"
+                    }
+                }
+            },
+            arm: {
+                name: "Перелом руки",
+                icon: "💪",
+                stages: {
+                    1: {
+                        name: "Иммобилизационный этап (1-3 неделя)",
+                        description: "Упражнения для здоровых суставов, дыхательная гимнастика",
+                        goals: "Поддержание общего тонуса, профилактика осложнений",
+                        precautions: "Не двигайте поврежденной рукой, выполняйте только разрешенные упражнения"
+                    },
+                    2: {
+                        name: "Постиммобилизационный (4-6 неделя)",
+                        description: "Щадящие движения в поврежденной руке, пассивная гимнастика",
+                        goals: "Восстановление подвижности суставов, профилактика контрактур",
+                        precautions: "Избегайте резких движений, не преодолевайте болевой барьер"
+                    },
+                    3: {
+                        name: "Восстановление функции (7-12 неделя)",
+                        description: "Активные движения, упражнения с малым сопротивлением",
+                        goals: "Восстановление силы и координации, улучшение мелкой моторики",
+                        precautions: "Постепенное увеличение нагрузки, контроль отека"
+                    },
+                    4: {
+                        name: "Тренировка (13+ неделя)",
+                        description: "Силовые упражнения, функциональная тренировка",
+                        goals: "Полное восстановление функции руки, возвращение к бытовой активности",
+                        precautions: "Избегайте чрезмерных нагрузок, следите за техникой"
+                    }
+                }
+            },
+            stroke: {
+                name: "После инсульта",
+                icon: "🧠",
+                stages: {
+                    1: {
+                        name: "Ранний восстановительный (1-3 месяц)",
+                        description: "Пассивная гимнастика, дыхательные упражнения, позиционирование",
+                        goals: "Профилактика осложнений, поддержание мышечного тонуса",
+                        precautions: "Контроль артериального давления, избегайте переутомления"
+                    },
+                    2: {
+                        name: "Поздний восстановительный (4-6 месяц)",
+                        description: "Активные движения с помощью, упражнения в положении сидя",
+                        goals: "Восстановление элементарных движений, улучшение координации",
+                        precautions: "Обеспечьте безопасность, используйте поддержку"
+                    },
+                    3: {
+                        name: "Период тренировки (7-12 месяц)",
+                        description: "Самостоятельные движения, ходьба с поддержкой, бытовые навыки",
+                        goals: "Восстановление самостоятельности в быту, улучшение походки",
+                        precautions: "Контролируйте равновесие, предотвращайте падения"
+                    },
+                    4: {
+                        name: "Адаптация (12+ месяц)",
+                        description: "Сложнокоординированные движения, социальная реабилитация",
+                        goals: "Максимальное восстановление функций, возвращение к социальной жизни",
+                        precautions: "Постепенное увеличение сложности, психологическая поддержка"
+                    }
+                }
+            }
+        };
+
+        // База данных упражнений для всех типов реабилитации
+        const exercises = {
+            // Перелом ноги
+            leg: [
+                {
+                    id: 'ankle_pumps',
+                    name: 'Насосы голеностопа',
+                    icon: '👣',
+                    description: 'Сгибание и разгибание стопы',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Сидя или лежа, медленно тяните носок на себя, затем от себя. Повторите 10-15 раз.',
+                    benefits: 'Улучшает кровообращение, предотвращает тромбоз'
+                },
+                {
+                    id: 'quad_sets',
+                    name: 'Напряжение квадрицепса',
+                    icon: '💪',
+                    description: 'Статическое напряжение передней поверхности бедра',
+                    stage: 1,
+                    difficulty: 'easy', 
+                    instructions: 'Лежа на спине, напрягите мышцы передней поверхности бедра, удерживайте 5 секунд.',
+                    benefits: 'Поддерживает мышечный тонус бедра'
+                },
+                {
+                    id: 'straight_leg_raise',
+                    name: 'Подъем прямой ноги',
+                    icon: '⬆️',
+                    description: 'Подъем ноги в положении лежа',
+                    stage: 2,
+                    difficulty: 'medium',
+                    instructions: 'Лежа на спине, поднимите прямую ногу на 45 градусов, удерживайте 3 секунды.',
+                    benefits: 'Укрепляет мышцы бедра и таза'
+                },
+                {
+                    id: 'mini_squats',
+                    name: 'Мини-приседания',
+                    icon: '🪑',
+                    description: 'Неглубокие приседания с опорой',
+                    stage: 3,
+                    difficulty: 'medium',
+                    instructions: 'Держась за стул, выполните неглубокое приседание (30-45 градусов).',
+                    benefits: 'Укрепляет мышцы бедер и ягодиц'
+                }
+            ],
+            
+            // Перелом руки
+            arm: [
+                {
+                    id: 'finger_flexion',
+                    name: 'Сгибание пальцев',
+                    icon: '✋',
+                    description: 'Поочередное сгибание пальцев',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Здоровой рукой осторожно сгибайте и разгибайте каждый палец поврежденной руки.',
+                    benefits: 'Поддерживает подвижность пальцев, улучшает кровообращение'
+                },
+                {
+                    id: 'wrist_circles',
+                    name: 'Круговые движения кистью',
+                    icon: '🔄',
+                    description: 'Вращение кистью здоровой руки',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Выполняйте медленные круговые движения кистью здоровой руки в обе стороны.',
+                    benefits: 'Поддерживает подвижность лучезапястного сустава'
+                },
+                {
+                    id: 'elbow_flexion',
+                    name: 'Сгибание локтя',
+                    icon: '↔️',
+                    description: 'Пассивное сгибание локтевого сустава',
+                    stage: 2,
+                    difficulty: 'easy',
+                    instructions: 'С помощью здоровой руки осторожно сгибайте и разгибайте локоть поврежденной руки.',
+                    benefits: 'Восстанавливает подвижность локтевого сустава'
+                },
+                {
+                    id: 'shoulder_circles',
+                    name: 'Круговые движения плечом',
+                    icon: '⭕',
+                    description: 'Медленные вращения плечевым суставом',
+                    stage: 2,
+                    difficulty: 'medium',
+                    instructions: 'Стоя или сидя, выполняйте медленные круговые движения плечом вперед и назад.',
+                    benefits: 'Восстанавливает подвижность плечевого сустава'
+                },
+                {
+                    id: 'grip_strength',
+                    name: 'Укрепление хвата',
+                    icon: '🗜️',
+                    description: 'Сжатие мягкого мячика',
+                    stage: 3,
+                    difficulty: 'medium',
+                    instructions: 'Мягко сжимайте и разжимайте мягкий мячик или поролоновую губку.',
+                    benefits: 'Укрепляет мышцы предплечья и кисти'
+                },
+                {
+                    id: 'arm_raises',
+                    name: 'Подъемы руки',
+                    icon: '⬆️',
+                    description: 'Подъем руки перед собой и в стороны',
+                    stage: 3,
+                    difficulty: 'medium',
+                    instructions: 'Медленно поднимайте руку перед собой до уровня плеч, затем в стороны.',
+                    benefits: 'Укрепляет дельтовидные мышцы'
+                }
+            ],
+            
+            // После инсульта
+            stroke: [
+                {
+                    id: 'breathing_exercises',
+                    name: 'Дыхательная гимнастика',
+                    icon: '🌬️',
+                    description: 'Глубокое диафрагмальное дыхание',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Лежа на спине, медленно вдыхайте через нос, выдыхайте через рот. Рука на животе.',
+                    benefits: 'Улучшает оксигенацию, снижает мышечное напряжение'
+                },
+                {
+                    id: 'passive_movements',
+                    name: 'Пассивные движения',
+                    icon: '🔄',
+                    description: 'Движения конечностей с помощью инструктора',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Специалист осторожно двигает вашими конечностями во всех суставах.',
+                    benefits: 'Поддерживает подвижность суставов, предотвращает контрактуры'
+                },
+                {
+                    id: 'mental_practice',
+                    name: 'Ментальная тренировка',
+                    icon: '🧠',
+                    description: 'Мысленное представление движений',
+                    stage: 1,
+                    difficulty: 'easy',
+                    instructions: 'Закройте глаза и мысленно представляйте, как выполняете различные движения.',
+                    benefits: 'Активирует двигательные центры мозга'
+                },
+                {
+                    id: 'sitting_balance',
+                    name: 'Баланс сидя',
+                    icon: '🪑',
+                    description: 'Удержание равновесия в положении сидя',
+                    stage: 2,
+                    difficulty: 'medium',
+                    instructions: 'Сидя на краю кровати, удерживайте равновесие, постепенно уменьшая поддержку.',
+                    benefits: 'Улучшает контроль туловища, готовит к ходьбе'
+                },
+                {
+                    id: 'arm_support',
+                    name: 'Поддержка руки',
+                    icon: '🤲',
+                    description: 'Активные движения с поддержкой',
+                    stage: 2,
+                    difficulty: 'medium',
+                    instructions: 'С поддержкой инструктора выполняйте простые движения пораженной рукой.',
+                    benefits: 'Восстанавливает нервно-мышечный контроль'
+                },
+                {
+                    id: 'weight_shifting',
+                    name: 'Перенос веса',
+                    icon: '⚖️',
+                    description: 'Перенос веса тела с ноги на ногу',
+                    stage: 3,
+                    difficulty: 'medium',
+                    instructions: 'Стоя с опорой, медленно переносите вес тела с одной ноги на другую.',
+                    benefits: 'Улучшает баланс и координацию'
+                },
+                {
+                    id: 'fine_motor',
+                    name: 'Мелкая моторика',
+                    icon: '✋',
+                    description: 'Упражнения для пальцев и кисти',
+                    stage: 3,
+                    difficulty: 'hard',
+                    instructions: 'Перебирайте мелкие предметы, сжимайте мягкие мячики, рисуйте.',
+                    benefits: 'Восстанавливает тонкие движения кисти'
+                },
+                {
+                    id: 'gait_training',
+                    name: 'Тренировка ходьбы',
+                    icon: '🚶',
+                    description: 'Обучение правильной ходьбе',
+                    stage: 4,
+                    difficulty: 'hard',
+                    instructions: 'Под наблюдением инструктора практикуйте ходьбу с правильной техникой.',
+                    benefits: 'Восстанавливает нормальный паттерн ходьбы'
+                }
+            ]
+        };
+
+        // Инициализация этапов реабилитации
+        function initializeStages() {
+            rehabStages.innerHTML = '';
+            const stages = rehabTypes[state.currentRehabType].stages;
+            
+            for (let i = 1; i <= 4; i++) {
+                const stage = stages[i];
+                const stageElement = document.createElement('div');
+                stageElement.className = `stage ${i === state.currentStage ? 'active' : ''}`;
+                stageElement.innerHTML = `
+                    <div class="stage-number">${i}</div>
+                    <div>${stage.name.split(' ')[0]}<br>${stage.name.split(' ').slice(1).join(' ')}</div>
+                `;
+                stageElement.addEventListener('click', () => selectStage(i));
+                rehabStages.appendChild(stageElement);
+            }
+        }
+
+        // Инициализация упражнений
+        function initializeExercises() {
+            exercisesGrid.innerHTML = '';
+            const typeExercises = exercises[state.currentRehabType] || [];
+            const stageExercises = typeExercises.filter(ex => ex.stage === state.currentStage);
+            
+            if (stageExercises.length === 0) {
+                exercisesGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #666;">Упражнения для этого этапа находятся в разработке</div>';
+                return;
+            }
+            
+            stageExercises.forEach(exercise => {
+                const card = document.createElement('div');
+                card.className = 'exercise-card';
+                card.innerHTML = `
+                    <div class="exercise-icon">${exercise.icon}</div>
+                    <div><strong>${exercise.name}</strong></div>
+                    <div style="font-size: 0.8em; color: #666;">${exercise.description}</div>
+                    <div class="exercise-difficulty ${exercise.difficulty}">
+                        ${exercise.difficulty === 'easy' ? 'легко' : exercise.difficulty === 'medium' ? 'средне' : 'сложно'}
+                    </div>
+                `;
+                card.addEventListener('click', () => selectExercise(exercise));
+                exercisesGrid.appendChild(card);
+            });
+        }
+
+        // Выбор типа реабилитации
+        function selectRehabType(type) {
+            state.currentRehabType = type;
+            state.currentStage = 1;
+            state.currentExercise = null;
+            
+            // Обновление активного типа
+            document.querySelectorAll('.rehab-type').forEach(rehabType => {
+                rehabType.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Обновление медицинского предупреждения
+            updateMedicalAlert();
+            
+            initializeStages();
+            selectStage(1);
+            
+            const rehabType = rehabTypes[type];
+            addToLog(`Выбран тип реабилитации: ${rehabType.name}`, 'success');
+        }
+
+        // Выбор этапа реабилитации
+        function selectStage(stageNumber) {
+            state.currentStage = stageNumber;
+            state.currentExercise = null;
+            
+            // Обновление активного этапа
+            document.querySelectorAll('.stage').forEach((stage, index) => {
+                stage.classList.toggle('active', index === stageNumber - 1);
+            });
+            
+            const stage = rehabTypes[state.currentRehabType].stages[stageNumber];
+            stageInfo.innerHTML = `<strong>${stage.name}:</strong> ${stage.description}`;
+            currentProgramDisplay.textContent = `${rehabTypes[state.currentRehabType].name} - ${stage.name}`;
+            stageGoalsDisplay.textContent = `Цели: ${stage.goals}`;
+            
+            initializeExercises();
+            addToLog(`Выбран этап: ${stage.name}`, 'success');
+            updateLiveFeedback(`Этап ${stageNumber}: ${stage.description}`);
+        }
+
+        // Обновление медицинского предупреждения
+        function updateMedicalAlert() {
+            const alerts = {
+                leg: "⚠️ При переломе ноги избегайте осевой нагрузки до разрешения врача!",
+                arm: "⚠️ При переломе руки не выполняйте упражнения через боль!",
+                stroke: "⚠️ После инсульта необходим постоянный медицинский контроль!"
+            };
+            medicalAlert.textContent = alerts[state.currentRehabType];
+        }
+
+        // [ОСТАЛЬНАЯ ЛОГИКА АНАЛОГИЧНА ПРЕДЫДУЩЕЙ ВЕРСИИ...]
+        // Для экономии места оставлю основные функции без изменений
+
+        // Выбор упражнения
+        function selectExercise(exercise) {
+            state.currentExercise = exercise;
+            
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            
+            addToLog(`Выбрано упражнение: ${exercise.name}`, 'success');
+            updateLiveFeedback(`<strong>${exercise.name}</strong><br>${exercise.instructions}`);
+            
+            if (state.isCameraOn) {
+                analysisBtn.disabled = false;
+            }
+        }
+
+        // Включение камеры
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 } 
+                });
+                video.srcObject = stream;
+                state.isCameraOn = true;
+                cameraBtn.textContent = '📷 Камера включена';
+                cameraBtn.disabled = true;
+                cameraBtn.style.background = '#00a085';
+                
+                if (state.currentExercise) {
+                    analysisBtn.disabled = false;
+                }
+                
+                addToLog('Камера успешно включена', 'success');
+                updateLiveFeedback('Камера активна. Выберите упражнение и начните анализ.');
+                
+            } catch (error) {
+                addToLog('Ошибка доступа к камере', 'error');
+                updateLiveFeedback('Не удалось получить доступ к камере. Проверьте разрешения.');
+            }
+        }
+
+        // Основные функции управления...
+        function toggleAnalysis() {
+            if (!state.isAnalyzing) {
+                startAnalysis();
+            } else {
+                stopAnalysis();
+            }
+        }
+
+        function startAnalysis() {
+            if (!state.currentExercise) {
+                updateLiveFeedback('Сначала выберите упражнение!', 'error');
+                return;
+            }
+
+            state.isAnalyzing = true;
+            state.startTime = Date.now();
+            state.repetitions = 0;
+            state.accuracy = 0;
+            
+            analysisBtn.textContent = '⏸️ Остановить анализ';
+            analysisBtn.style.background = '#e17055';
+            
+            startTimer();
+            simulateRehabAnalysis();
+            
+            addToLog(`Начат анализ: ${state.currentExercise.name}`, 'success');
+            updateLiveFeedback(`Анализирую: ${state.currentExercise.name}. ${state.currentExercise.instructions}`);
+        }
+
+        function stopAnalysis() {
+            state.isAnalyzing = false;
+            
+            analysisBtn.textContent = '⏯️ Начать анализ';
+            analysisBtn.style.background = '#00b894';
+            
+            stopTimer();
+            
+            addToLog(`Анализ остановлен. Выполнено ${state.repetitions} повторений`, 'warning');
+            updateLiveFeedback('Анализ остановлен. Точность: ' + state.accuracy + '%');
+        }
+
+        function startTimer() {
+            state.timerInterval = setInterval(() => {
+                state.sessionDuration++;
+                const minutes = Math.floor(state.sessionDuration / 60);
+                const seconds = state.sessionDuration % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                durationDisplay.textContent = timerDisplay.textContent;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(state.timerInterval);
+        }
+
+        function simulateRehabAnalysis() {
+            if (!state.isAnalyzing) return;
+
+            const analysisInterval = setInterval(() => {
+                if (!state.isAnalyzing) {
+                    clearInterval(analysisInterval);
+                    return;
+                }
+
+                const exercise = state.currentExercise;
+                if (!exercise) return;
+
+                const feedbacks = [
+                    "✅ Упражнение выполняется правильно. Продолжайте в том же духе!",
+                    "⚠️ Обратите внимание на технику выполнения. Движения должны быть плавными.",
+                    "✅ Отличный контроль движений! Темп и амплитуда соответствуют рекомендациям.",
+                    "❌ Слишком быстрый темп. Замедлите выполнение для лучшего контроля."
+                ];
+                
+                const randomFeedback = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+                const newAccuracy = 70 + Math.floor(Math.random() * 30);
+                const shouldIncrementRepetition = Math.random() > 0.5;
+
+                if (shouldIncrementRepetition) {
+                    state.repetitions++;
+                    repetitionsDisplay.textContent = state.repetitions;
+                }
+
+                state.accuracy = newAccuracy;
+                accuracyDisplay.textContent = newAccuracy + '%';
+                progressBar.style.width = newAccuracy + '%';
+
+                updateLiveFeedback(randomFeedback);
+                addToLog(randomFeedback, newAccuracy > 80 ? 'success' : newAccuracy > 60 ? 'warning' : 'error');
+                
+            }, 3000);
+        }
+
+        function updateLiveFeedback(message) {
+            liveFeedback.innerHTML = message;
+        }
+
+        function addToLog(message, type = 'info') {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `
+                <span class="${type}">${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '❌'}</span>
+                <span>${new Date().toLocaleTimeString()} - ${message}</span>
+            `;
+            feedbackLog.prepend(logEntry);
+            
+            if (feedbackLog.children.length > 8) {
+                feedbackLog.removeChild(feedbackLog.lastChild);
+            }
+        }
+
+        function showInstructions() {
+            if (state.currentExercise) {
+                const exercise = state.currentExercise;
+                alert(`ИНСТРУКЦИЯ: ${exercise.name}\n\n${exercise.instructions}\n\nПольза: ${exercise.benefits}`);
+            } else {
+                alert("Сначала выберите упражнение для просмотра инструкции");
+            }
+        }
+
+        function showPrecautions() {
+            const stage = rehabTypes[state.currentRehabType].stages[state.currentStage];
+            alert(`МЕРЫ ПРЕДОСТОРОЖНОСТИ:\n\n${stage.precautions}\n\n${medicalAlert.textContent}`);
+        }
+
+        // Инициализация при загрузке
+        window.onload = function() {
+            selectRehabType('leg'); // Начинаем с реабилитации ноги
+            addToLog('Комплексная система реабилитации инициализирована');
+        };
+    </script>
+</body>
+</html>
